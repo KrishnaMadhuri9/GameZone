@@ -1,5 +1,6 @@
 import random
 import pwinput
+import string
 
 # Welcome message printing function
 def WelcomePrint(msg):
@@ -54,6 +55,7 @@ def HangManGame():
         print(" _"*length)
         print(f"\nYOU HAVE {length+2} CHANCES\n")
         guess_word=list("_"*length)
+        success=0
         for i in range(length+2):
             val=input("Enter a letter to guess: ").lower()
             if val in temp:
@@ -66,7 +68,10 @@ def HangManGame():
                 print(j,end=" ")
                 if(guess_word == temp1):
                     print(f"\nCongratulations! You guessed the word {words[ind]}\n")
+                    success=1
                     break
+            if(success==1):
+                break
             print()
         if "_" in guess_word:
             print(f'\nTry Again! The word is {words[ind]}\n')
@@ -86,26 +91,40 @@ def CowsAndBullsGame():
     no_of_tries=[0 for i in range(n)]
     secret_codes=[]
     print(f'SECRET CODE IS 4-DIGIT AND WITHOUT DUBLICATE')
-    for i in range(1,n+1):
-        while(1):
-            print(f'Player{i}:')
-            # val=(input("ENTER YOUR SECRET CODE: "))
-            val=pwinput.pwinput(prompt="ENTER YOUR SECRET CODE: ",mask="*")
-            val_list=list(val)
-            length=len(val_list)
-            for j in range(length):
-                a=val_list.count(val_list[j])
-                if(a>1):
-                    print("DIGITS SHOULD NOT BE REPEATED")
-                    break
-            if(j==(length-1)):
-                break    
+    if(n>1):
+        for i in range(1,n+1):
+            while(1):
+                while(1):
+                    print(f'Player{i}:')
+                    # val=(input("ENTER YOUR SECRET CODE: "))
+                    val=pwinput.pwinput(prompt="ENTER YOUR 4-DIGIT SECRET CODE: ",mask="*")
+                    if(len(val)==4):
+                        break
+                val_list=list(val)
+                length=len(val_list)
+                for j in range(length):
+                    a=val_list.count(val_list[j])
+                    if(a>1):
+                        print("DIGITS SHOULD NOT BE REPEATED")
+                        break
+                if(j==(length-1)):
+                    break    
+            secret_codes.append(val)
+    else:
+        digits=string.digits
+        val=(random.sample(digits,4))
+        val="".join(val)
         secret_codes.append(val)
+
     for i in range(1,n+1):
         while(1):
             temp=i+1-((i==n)*(n))
-            print(f"\nPLAYER{i} PLEASE GUESS THE SECRET CODE OF PLAYER{temp}\n")
-            guess=input("PLEASE ENTER YOUR INPUT: ")
+            while(1):
+                print(f"\nPLAYER{i} PLEASE GUESS THE SECRET CODE OF PLAYER{temp}\n")
+                guess=input("PLEASE ENTER YOUR 4-DIGIT INPUT: ")
+                if(len(guess)==4):
+                    break
+
             guess_list=list(guess)
             expected=secret_codes[temp-1]
             expected_list=list(expected)
